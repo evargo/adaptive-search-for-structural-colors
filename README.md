@@ -1,5 +1,6 @@
 # adaptive-search-for-structural-colors
 The Mathematica package includes the following files:
+
 READ_ME: documentation for the package
 StructuralColorFramework: general functions for the adaptive mesh search
 StructuralColor1D: designing for a 1D stack
