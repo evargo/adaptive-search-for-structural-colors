@@ -1,0 +1,1234 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     46025,       1226]
+NotebookOptionsPosition[     42710,       1120]
+NotebookOutlinePosition[     43064,       1136]
+CellTagsIndexPosition[     43021,       1133]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Adaptive Search for Structural Colors", "Title",
+ CellChangeTimes->{{3.706985437265686*^9, 3.706985445901456*^9}}],
+
+Cell["\<\
+Thanks for downloading this package! Depending on what \
+you\[CloseCurlyQuote]re trying to do, different sub-packages will be of \
+interest to you:\
+\>", "Text",
+ CellChangeTimes->{{3.706985449531447*^9, 3.706985617148498*^9}},
+ FontSize->18],
+
+Cell[CellGroupData[{
+
+Cell["General Start-Up", "Section",
+ CellChangeTimes->{{3.706985743263617*^9, 3.70698575459095*^9}, {
+  3.7069860021355267`*^9, 3.706986005592614*^9}}],
+
+Cell["\<\
+To use the package, open a new Mathematica notebook in the same location as \
+the package, and evaluate these lines:\
+\>", "Text",
+ CellChangeTimes->{{3.706985784879313*^9, 3.706985834516859*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Get", "[", 
+  RowBox[{"\"\<StructuralColorFramework`\>\"", ",", 
+   RowBox[{"Path", "\[Rule]", 
+    RowBox[{"NotebookDirectory", "[", "]"}]}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.7075166515475187`*^9, 3.70751667344489*^9}}],
+
+Cell["\<\
+This loads the general Structural Color package, which has two public \
+functions:\
+\>", "Text",
+ CellChangeTimes->{{3.7069858997379303`*^9, 3.706985952271347*^9}, {
+  3.706986043726809*^9, 3.706986047576795*^9}}],
+
+Cell[BoxData[
+ RowBox[{"?", "SpectrumToColor"}]], "Input",
+ CellChangeTimes->{{3.7069876490727777`*^9, 3.70698765269737*^9}}],
+
+Cell[BoxData[
+ RowBox[{"?", "ColorToSpectrum"}]], "Input",
+ CellChangeTimes->{{3.706987656337243*^9, 3.706987660378895*^9}}],
+
+Cell["\<\
+SpectrumToColor is the function underlying much of the calculations, and is \
+added here independently for convenience.
+
+ColorToSpectrum is used in case a sample reflectance spectrum is needed for \
+debugging. It is the mathematical inverse of SpectrumToColor, and \
+occasionally returns non-physical spectra.\
+\>", "Text",
+ CellChangeTimes->{{3.7069860143032293`*^9, 3.706986251272531*^9}, {
+  3.706986844838069*^9, 3.70698688877039*^9}, {3.7069876766272984`*^9, 
+  3.706987713093217*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["Colors in Mathematica",
+ FontWeight->"Plain"]], "Subsubsection",
+ CellChangeTimes->{{3.7069860143032293`*^9, 3.706986251272531*^9}, {
+  3.706986844838069*^9, 3.70698688877039*^9}, {3.7069876766272984`*^9, 
+  3.706987682889867*^9}},
+ FontWeight->"Bold"],
+
+Cell["\<\
+Colors are visualized in Mathematica with the XYZColor function, which can be \
+used to visually choose colors (start typing it out, and the option will \
+appear).\
+\>", "Text",
+ CellChangeTimes->{{3.7069860143032293`*^9, 3.706986251272531*^9}, {
+  3.706986844838069*^9, 3.70698688877039*^9}, {3.7069876766272984`*^9, 
+  3.706987711172182*^9}}],
+
+Cell[BoxData[
+ RowBox[{"XYZColor", "[", 
+  RowBox[{"0.27", ",", "0.26", ",", "0.74"}], "]"}]], "Input",
+ CellChangeTimes->{{3.706986206235812*^9, 3.7069862078673353`*^9}, {
+  3.70698625403164*^9, 3.7069862666024933`*^9}}],
+
+Cell["\<\
+The Color object can be converted back into a set of XYZ coordinates with \
+List@@:\
+\>", "Text",
+ CellChangeTimes->{{3.706986270867353*^9, 3.70698630678293*^9}}],
+
+Cell[BoxData[
+ RowBox[{"List", "@@", 
+  InterpretationBox[
+   ButtonBox[
+    TooltipBox[
+     GraphicsBox[{
+       {GrayLevel[0], RectangleBox[{0, 0}]}, 
+       {GrayLevel[0], RectangleBox[{1, -1}]}, 
+       {XYZColor[0.27, 0.26, 0.74], RectangleBox[{0, -1}, {2, 1}]}},
+      AspectRatio->1,
+      Frame->True,
+      FrameStyle->XYZColor[
+       0.11191719695656793`, 0.10877052537691946`, 0.29798496948632275`],
+      FrameTicks->None,
+      ImageSize->
+       Dynamic[{
+        Automatic, 1.35 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+         Magnification]}],
+      PlotRangePadding->None],
+     "XYZColor[0.27, 0.26, 0.74]"],
+    Appearance->None,
+    BaseStyle->{},
+    BaselinePosition->Baseline,
+    ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+      If[
+       Not[
+        AbsoluteCurrentValue["Deployed"]], 
+       SelectionMove[Typeset`box$, All, Expression]; 
+       FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+       FrontEnd`Private`$ColorSelectorInitialColor = 
+        XYZColor[0.27, 0.26, 0.74]; 
+       FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+       MathLink`CallFrontEnd[
+         FrontEnd`AttachCell[Typeset`box$, 
+          FrontEndResource["XYZColorValueSelector"], {0, {Left, Bottom}}, {
+          Left, Top}, 
+          "ClosingActions" -> {
+           "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+    DefaultBaseStyle->{},
+    Evaluator->Automatic,
+    Method->"Preemptive"],
+   XYZColor[0.27, 0.26, 0.74],
+   Editable->False,
+   Selectable->False]}]], "Input",
+ CellChangeTimes->{{3.7069862954350567`*^9, 3.7069862995528107`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Working with Spectra", "Subsubsection",
+ CellChangeTimes->{{3.706987733831354*^9, 3.706987748312047*^9}}],
+
+Cell[BoxData[
+ RowBox[{"blueSpectrum", "=", 
+  RowBox[{"ColorToSpectrum", "[", 
+   RowBox[{"List", "@@", 
+    InterpretationBox[
+     ButtonBox[
+      TooltipBox[
+       GraphicsBox[{
+         {GrayLevel[0], RectangleBox[{0, 0}]}, 
+         {GrayLevel[0], RectangleBox[{1, -1}]}, 
+         {XYZColor[0.27, 0.26, 0.74], RectangleBox[{0, -1}, {2, 1}]}},
+        AspectRatio->1,
+        Frame->True,
+        FrameStyle->XYZColor[
+         0.11191719695656793`, 0.10877052537691946`, 0.29798496948632275`],
+        FrameTicks->None,
+        ImageSize->
+         Dynamic[{
+          Automatic, 1.35 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+           Magnification]}],
+        PlotRangePadding->None],
+       "XYZColor[0.27, 0.26, 0.74]"],
+      Appearance->None,
+      BaseStyle->{},
+      BaselinePosition->Baseline,
+      ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+        If[
+         Not[
+          AbsoluteCurrentValue["Deployed"]], 
+         SelectionMove[Typeset`box$, All, Expression]; 
+         FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+         FrontEnd`Private`$ColorSelectorInitialColor = 
+          XYZColor[0.27, 0.26, 0.74]; 
+         FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+         MathLink`CallFrontEnd[
+           FrontEnd`AttachCell[Typeset`box$, 
+            FrontEndResource["XYZColorValueSelector"], {0, {Left, Bottom}}, {
+            Left, Top}, 
+            "ClosingActions" -> {
+             "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+      DefaultBaseStyle->{},
+      Evaluator->Automatic,
+      Method->"Preemptive"],
+     XYZColor[0.27, 0.26, 0.74],
+     Editable->False,
+     Selectable->False]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.7069863089889593`*^9, 3.706986317318738*^9}, {
+  3.70698642585324*^9, 3.706986431865377*^9}}],
+
+Cell["\<\
+The Private`\[Lambda] variable means that this result is coming from a \
+package using a Private context. \
+\>", "Text",
+ CellChangeTimes->{{3.7069863528349257`*^9, 3.7069864000954638`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Plot", "[", 
+  RowBox[{"blueSpectrum", ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"Private`\[Lambda]", ",", " ", "385", ",", "745"}], "}"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.706986420709407*^9, 3.7069864748134403`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"XYZColor", "@", 
+  RowBox[{"SpectrumToColor", "[", "blueSpectrum", "]"}]}]], "Input",
+ CellChangeTimes->{{3.706986486927848*^9, 3.706986504728451*^9}}],
+
+Cell["\<\
+In addition to the public functions, the StructuralColorFramework package \
+includes many necessary private functions used by the 1D, 2D, and 3D \
+sub-packages. They load it automatically.\
+\>", "Text",
+ CellChangeTimes->{{3.706986507566935*^9, 3.706986592271118*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Design of 1D Stacks", "Section",
+ CellChangeTimes->{{3.7069856040503407`*^9, 3.7069856120526533`*^9}, 
+   3.706985647490052*^9}],
+
+Cell[BoxData[
+ RowBox[{"Get", "[", 
+  RowBox[{"\"\<StructuralColor1D`\>\"", ",", 
+   RowBox[{"Path", "\[Rule]", 
+    RowBox[{"NotebookDirectory", "[", "]"}]}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.7075166515475187`*^9, 3.70751667344489*^9}, {
+  3.707516729483411*^9, 3.707516730276865*^9}}],
+
+Cell["\<\
+This is the most simple of three sub-packages, but they all have a similar \
+set of functions.
+
+If you simply wish to know the spectrum or color of a certain photonic stack, \
+use the Spectrum1D function:\
+\>", "Text",
+ CellChangeTimes->{{3.7069869130457478`*^9, 3.706986939070044*^9}, {
+  3.706987353370919*^9, 3.7069873974136877`*^9}, {3.70698759899545*^9, 
+  3.706987600471322*^9}}],
+
+Cell[BoxData[
+ RowBox[{"?", "Spectrum1D"}]], "Input",
+ CellChangeTimes->{{3.706987482685734*^9, 3.706987485806975*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Spectrum1D", "[", 
+  RowBox[{"300", ",", "200", ",", 
+   RowBox[{"{", 
+    RowBox[{"1.49", ",", "1", ",", "5", ",", "0"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.706987399944409*^9, 3.706987421302608*^9}}],
+
+Cell[BoxData[
+ RowBox[{"XYZColor", "[", 
+  RowBox[{"SpectrumToColor", "[", 
+   RowBox[{"Spectrum1D", "[", 
+    RowBox[{"300", ",", "200", ",", 
+     RowBox[{"{", 
+      RowBox[{"1.49", ",", "1", ",", "5", ",", "0"}], "}"}]}], "]"}], "]"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.7069875121402397`*^9, 3.7069875282698383`*^9}}],
+
+Cell[TextData[{
+ "This code was originally published via the Wolfram Demonstrations Project, ",
+ StyleBox["http://demonstrations.wolfram.com/MultilayerPhotonicBandgap",
+  FontSlant->"Italic"]
+}], "Text",
+ CellChangeTimes->{{3.7069879339961348`*^9, 3.706987950762474*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Searching for a 1D Geometry", "Subsubsection",
+ CellChangeTimes->{{3.7069877634699*^9, 3.7069877703487453`*^9}}],
+
+Cell["\<\
+The \[OpenCurlyDoubleQuote]PhotonicSystemX\[CloseCurlyDoubleQuote] set of \
+variables puts system parameters into the form used in the search. \
+\>", "Text",
+ CellChangeTimes->{{3.706986953308428*^9, 3.706987129201899*^9}, {
+   3.706987554430395*^9, 3.706987575203444*^9}, 3.7069876057606583`*^9, 
+   3.706987759057901*^9, 3.706987790800144*^9}],
+
+Cell[BoxData[
+ RowBox[{"?", "PhotonicSystem1D"}]], "Input",
+ CellChangeTimes->{{3.7069877926134853`*^9, 3.70698779506738*^9}}],
+
+Cell["\<\
+In this case, the 1D search is designed to choose layer thicknesses when \
+refractive indices and layer number are already chosen. This can be switched \
+in the main code by adding layer thicknesses into the PhotonicSystem1D \
+definition.
+
+A 5-layer system with of PMMA and air, viewed from above, has the following \
+entry:\
+\>", "Text",
+ CellChangeTimes->{{3.706986953308428*^9, 3.706987129201899*^9}, {
+   3.706987554430395*^9, 3.706987575203444*^9}, 3.7069876057606583`*^9, 
+   3.706987759057901*^9, 3.706987801852915*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PhotonicSystem1D", "[", 
+   RowBox[{"1.49", ",", " ", "1", ",", " ", "5", ",", " ", "0"}], "]"}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.7069871306518183`*^9, 3.706987146220109*^9}, {
+  3.7069878213792877`*^9, 3.7069878244086237`*^9}}],
+
+Cell["\<\
+Now you\[CloseCurlyQuote]re ready to iterate! Just stick your desired color \
+and the entire PhotonicSystem into the function Iteration1D\
+\>", "Text",
+ CellChangeTimes->{{3.706987153173603*^9, 3.70698719601488*^9}}],
+
+Cell[BoxData[
+ RowBox[{"?", "Iteration1D"}]], "Input",
+ CellChangeTimes->{{3.7069876358824368`*^9, 3.706987638045126*^9}}],
+
+Cell["\<\
+Use IterationReset1D if you want to stop searching for the same color.\
+\>", "Text",
+ CellChangeTimes->{{3.70708491805336*^9, 3.7070849446712914`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"?", "IterationReset1D"}]], "Input",
+ CellChangeTimes->{{3.70708492438774*^9, 3.707084926837893*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Design of 2D Lattices (requires Fortran)", "Section",
+ CellChangeTimes->{{3.7069856238386097`*^9, 3.706985653134315*^9}}],
+
+Cell[TextData[{
+ "The 2D code is set up exactly like the 1D code, with one key difference: \
+the calculations are performed with Fortran, so there\[CloseCurlyQuote]s a \
+little more set-up involved.\n\nThe Fortran code was written by Ward and \
+Pendry, and the original documentation is found here: ",
+ StyleBox["http://www.cmth.ph.ic.ac.uk/photonics/Newphotonics/pdf/CompPCom128_\
+590.pdf",
+  FontSlant->"Italic"],
+ "\nThe version of ONYX you downloaded has been modified, but the underlying \
+calculation is the same.\n\nThe following instructions are for running the \
+code using Terminal on a Mac. The set-up for a Windows machine should be very \
+similar, but you\[CloseCurlyQuote]ll have to figure out the details on your \
+own :)\n\nYou\[CloseCurlyQuote]ll need a Fortran compiler, available here: ",
+ StyleBox["https://directory.fsf.org/wiki/Gfortran",
+  FontSlant->"Italic"],
+ "\n\nThis folder contains two .sh files, which are the file type read by the \
+Terminal. If you save these files, the only thing you need to do in order to \
+perform the 2D search is to run the Iteration2D function, and then run the \
+Terminal files when asked to do so by Iteration2D (make sure your sound is \
+on!).\n\nIMPORTANT: open these files and change the file paths to wherever \
+the ONYX files are stored on your computer. Unless you\[CloseCurlyQuote]re \
+experienced at using Terminal, I recommend just storing them on your Home \
+drive.\n\nNow, go into the StructuralColor2D file, and change ",
+ StyleBox["Users/emmavargo ",
+  FontSlant->"Italic"],
+ "to wherever you have the rest of the ONYX files stored."
+}], "Text",
+ CellChangeTimes->{{3.70708189390764*^9, 3.7070820155463877`*^9}, {
+  3.707082098411187*^9, 3.7070822878859463`*^9}, {3.707083152072303*^9, 
+  3.7070832329001303`*^9}, {3.707083423215391*^9, 3.707083423698073*^9}, {
+  3.707083504794001*^9, 3.7070835166126537`*^9}, {3.707083634056415*^9, 
+  3.7070836534178753`*^9}, {3.707083688856222*^9, 3.707083691347065*^9}, {
+  3.707083919312574*^9, 3.707083937869678*^9}, {3.7070839690012712`*^9, 
+  3.7070839932494173`*^9}, {3.707084316196294*^9, 3.707084398857888*^9}, {
+  3.707084442230307*^9, 3.7070844917536097`*^9}, {3.707092345094811*^9, 
+  3.7070923486733923`*^9}, {3.7075167791211348`*^9, 3.707516786121582*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Get", "[", 
+  RowBox[{"\"\<StructuralColor2D`\>\"", ",", 
+   RowBox[{"Path", "\[Rule]", 
+    RowBox[{"NotebookDirectory", "[", "]"}]}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.707082240329123*^9, 3.707082251813855*^9}, {
+  3.707516746345459*^9, 3.707516752223238*^9}}],
+
+Cell[BoxData[
+ RowBox[{"?", "PhotonicSystem2D"}]], "Input",
+ CellChangeTimes->{{3.7070822965792313`*^9, 3.707082298775036*^9}}],
+
+Cell[BoxData[
+ RowBox[{"?", "Iteration2D"}]], "Input",
+ CellChangeTimes->{{3.70708230600795*^9, 3.707082308437881*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Searching for a 2D Geometry", "Subsubsection",
+ CellChangeTimes->{{3.7069877634699*^9, 3.7069877703487453`*^9}, {
+  3.707083709657074*^9, 3.707083709785133*^9}}],
+
+Cell["\<\
+The process is a little strange at first, so here\[CloseCurlyQuote]s \
+step-by-step instructions:
+
+Evaluate the following line:\
+\>", "Text",
+ CellChangeTimes->{{3.707083241174999*^9, 3.707083242025043*^9}, 
+   3.707083694620282*^9, {3.7070923799917173`*^9, 3.70709239877258*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Iteration2D", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{".2", ",", ".3", ",", ".4"}], "}"}], ",", 
+   RowBox[{"PhotonicSystem2D", "[", 
+    RowBox[{"1", ",", "3.4"}], "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.70708572379047*^9, 3.70708573970452*^9}, {
+  3.7070924243247967`*^9, 3.707092428345055*^9}}],
+
+Cell["\<\
+You should have heard, \[OpenCurlyDoubleQuote]If you wish to keep searching, \
+please run the Terminal file.\[CloseCurlyDoubleQuote] You then have 30 \
+seconds to run the commands in Terminal before Mathematica starts looking for \
+results.
+
+To run the .sh files, type \[OpenCurlyDoubleQuote]sh \[OpenCurlyDoubleQuote] \
+into the Terminal and then drag the getOnyxDataset_[geometry].sh file into \
+the Terminal window. The filepath should appear, and then you can just hit \
+enter! Your geometry options are rect, for a rectangular lattice or hex, for \
+a hexagonal lattice.
+
+If the file runs correctly, you should see \[OpenCurlyDoubleQuote]Note: The \
+following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG \
+IEEE_DENORMAL\[CloseCurlyDoubleQuote] appear in the Terminal window. It\
+\[CloseCurlyQuote]s important to run Iteration2D before running the .sh file, \
+because it creates a \[OpenCurlyDoubleQuote]MarkComplete\
+\[CloseCurlyDoubleQuote] file the .sh talks to.
+
+Each iteration will take about 10 minutes.\
+\>", "Text",
+ CellChangeTimes->{{3.707082462248457*^9, 3.70708252288405*^9}, {
+   3.70708324775508*^9, 3.7070834111445103`*^9}, {3.707083465334053*^9, 
+   3.7070834893106413`*^9}, {3.707083718070148*^9, 3.707083718320488*^9}, {
+   3.7070837580577908`*^9, 3.707083792011231*^9}, {3.707084264996603*^9, 
+   3.707084297669167*^9}, {3.7070848603399963`*^9, 3.707084866480804*^9}, 
+   3.707085720516679*^9, {3.707092449087697*^9, 3.707092449579464*^9}}],
+
+Cell["\<\
+
+Your output will look like this:\
+\>", "Text",
+ CellChangeTimes->{{3.707082462248457*^9, 3.70708252288405*^9}, {
+  3.70708324775508*^9, 3.7070834111445103`*^9}, {3.707083465334053*^9, 
+  3.7070834893106413`*^9}, {3.707083718070148*^9, 3.707083718320488*^9}, {
+  3.7070837580577908`*^9, 3.707083792011231*^9}, {3.707084264996603*^9, 
+  3.707084297669167*^9}, {3.7070848603399963`*^9, 3.707084866480804*^9}, {
+  3.707085721324*^9, 3.70708572213843*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"These are the suggested dimensions:\"\>"], "Print",
+ CellChangeTimes->{3.707085637650289*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"8350", ",", "3653.1250000000005`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"8300", ",", "3631.2500000000005`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"8400", ",", "3675.0000000000005`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"8450", ",", "3644.0625`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"8500", ",", "3665.625`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"8400", ",", "3622.5`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"8550", ",", "3633.7500000000005`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"8600", ",", "3655.0000000000005`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"8500", ",", "3612.5000000000005`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"8250", ",", "3609.3750000000005`"}], "}"}]}], "}"}]], "Print",
+ CellChangeTimes->{3.707085637657683*^9}],
+
+Cell[BoxData["\<\"These are the corresponding colors:\"\>"], "Print",
+ CellChangeTimes->{3.7070856425159197`*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   InterpretationBox[
+    ButtonBox[
+     TooltipBox[
+      GraphicsBox[{
+        {GrayLevel[0], RectangleBox[{0, 0}]}, 
+        {GrayLevel[0], RectangleBox[{1, -1}]}, 
+        {XYZColor[
+         0.22379864127802554`, 0.3106325678220307, 0.34437671115387486`], 
+         RectangleBox[{0, -1}, {2, 1}]}},
+       AspectRatio->1,
+       Frame->True,
+       FrameStyle->XYZColor[
+        0.09351622490592498, 0.12903978628905452`, 0.1421169703541953],
+       FrameTicks->None,
+       ImageSize->
+        Dynamic[{
+         Automatic, 1.35 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+          Magnification]}],
+       PlotRangePadding->None],
+      "XYZColor[{0.22379864127802554, 0.3106325678220307, \
+0.34437671115387486}]"],
+     Appearance->None,
+     BaseStyle->{},
+     BaselinePosition->Baseline,
+     ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+       If[
+        Not[
+         AbsoluteCurrentValue["Deployed"]], 
+        SelectionMove[Typeset`box$, All, Expression]; 
+        FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+        FrontEnd`Private`$ColorSelectorInitialColor = 
+         XYZColor[
+          0.22379864127802554`, 0.3106325678220307, 0.34437671115387486`]; 
+        FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+        MathLink`CallFrontEnd[
+          FrontEnd`AttachCell[Typeset`box$, 
+           FrontEndResource["XYZColorValueSelector"], {0, {Left, Bottom}}, {
+           Left, Top}, 
+           "ClosingActions" -> {
+            "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+     DefaultBaseStyle->{},
+     Evaluator->Automatic,
+     Method->"Preemptive"],
+    XYZColor[{0.22379864127802554`, 0.3106325678220307, 0.34437671115387486`}],
+    Editable->False,
+    Selectable->False], ",", 
+   InterpretationBox[
+    ButtonBox[
+     TooltipBox[
+      GraphicsBox[{
+        {GrayLevel[0], RectangleBox[{0, 0}]}, 
+        {GrayLevel[0], RectangleBox[{1, -1}]}, 
+        {XYZColor[
+         0.21557278567261576`, 0.30407396582166163`, 0.33365527901694225`], 
+         RectangleBox[{0, -1}, {2, 1}]}},
+       AspectRatio->1,
+       Frame->True,
+       FrameStyle->XYZColor[
+        0.09004442233915194, 0.12632697075944072`, 0.13784518882637406`],
+       FrameTicks->None,
+       ImageSize->
+        Dynamic[{
+         Automatic, 1.35 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+          Magnification]}],
+       PlotRangePadding->None],
+      "XYZColor[{0.21557278567261576, 0.30407396582166163, \
+0.33365527901694225}]"],
+     Appearance->None,
+     BaseStyle->{},
+     BaselinePosition->Baseline,
+     ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+       If[
+        Not[
+         AbsoluteCurrentValue["Deployed"]], 
+        SelectionMove[Typeset`box$, All, Expression]; 
+        FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+        FrontEnd`Private`$ColorSelectorInitialColor = 
+         XYZColor[
+          0.21557278567261576`, 0.30407396582166163`, 0.33365527901694225`]; 
+        FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+        MathLink`CallFrontEnd[
+          FrontEnd`AttachCell[Typeset`box$, 
+           FrontEndResource["XYZColorValueSelector"], {0, {Left, Bottom}}, {
+           Left, Top}, 
+           "ClosingActions" -> {
+            "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+     DefaultBaseStyle->{},
+     Evaluator->Automatic,
+     Method->"Preemptive"],
+    XYZColor[{0.21557278567261576`, 0.30407396582166163`, 
+     0.33365527901694225`}],
+    Editable->False,
+    Selectable->False], ",", 
+   InterpretationBox[
+    ButtonBox[
+     TooltipBox[
+      GraphicsBox[{
+        {GrayLevel[0], RectangleBox[{0, 0}]}, 
+        {GrayLevel[0], RectangleBox[{1, -1}]}, 
+        {XYZColor[
+         0.23287969475812503`, 0.3165684292671393, 0.35391167938734897`], 
+         RectangleBox[{0, -1}, {2, 1}]}},
+       AspectRatio->1,
+       Frame->True,
+       FrameStyle->XYZColor[
+        0.09734996549731609, 0.13151503997492514`, 0.14591496011741648`],
+       FrameTicks->None,
+       ImageSize->
+        Dynamic[{
+         Automatic, 1.35 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+          Magnification]}],
+       PlotRangePadding->None],
+      "XYZColor[{0.23287969475812503, 0.3165684292671393, \
+0.35391167938734897}]"],
+     Appearance->None,
+     BaseStyle->{},
+     BaselinePosition->Baseline,
+     ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+       If[
+        Not[
+         AbsoluteCurrentValue["Deployed"]], 
+        SelectionMove[Typeset`box$, All, Expression]; 
+        FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+        FrontEnd`Private`$ColorSelectorInitialColor = 
+         XYZColor[
+          0.23287969475812503`, 0.3165684292671393, 0.35391167938734897`]; 
+        FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+        MathLink`CallFrontEnd[
+          FrontEnd`AttachCell[Typeset`box$, 
+           FrontEndResource["XYZColorValueSelector"], {0, {Left, Bottom}}, {
+           Left, Top}, 
+           "ClosingActions" -> {
+            "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+     DefaultBaseStyle->{},
+     Evaluator->Automatic,
+     Method->"Preemptive"],
+    XYZColor[{0.23287969475812503`, 0.3165684292671393, 0.35391167938734897`}],
+    Editable->False,
+    Selectable->False], ",", 
+   InterpretationBox[
+    ButtonBox[
+     TooltipBox[
+      GraphicsBox[{
+        {GrayLevel[0], RectangleBox[{0, 0}]}, 
+        {GrayLevel[0], RectangleBox[{1, -1}]}, 
+        {XYZColor[
+         0.2171169487534784, 0.30411907773179847`, 0.3332697150053751], 
+         RectangleBox[{0, -1}, {2, 1}]}},
+       AspectRatio->1,
+       Frame->True,
+       FrameStyle->XYZColor[
+        0.09076321083863494, 0.12639760758005708`, 0.1376949981560283],
+       FrameTicks->None,
+       ImageSize->
+        Dynamic[{
+         Automatic, 1.35 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+          Magnification]}],
+       PlotRangePadding->None],
+      "XYZColor[{0.2171169487534784, 0.30411907773179847, \
+0.3332697150053751}]"],
+     Appearance->None,
+     BaseStyle->{},
+     BaselinePosition->Baseline,
+     ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+       If[
+        Not[
+         AbsoluteCurrentValue["Deployed"]], 
+        SelectionMove[Typeset`box$, All, Expression]; 
+        FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+        FrontEnd`Private`$ColorSelectorInitialColor = 
+         XYZColor[
+          0.2171169487534784, 0.30411907773179847`, 0.3332697150053751]; 
+        FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+        MathLink`CallFrontEnd[
+          FrontEnd`AttachCell[Typeset`box$, 
+           FrontEndResource["XYZColorValueSelector"], {0, {Left, Bottom}}, {
+           Left, Top}, 
+           "ClosingActions" -> {
+            "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+     DefaultBaseStyle->{},
+     Evaluator->Automatic,
+     Method->"Preemptive"],
+    XYZColor[{0.2171169487534784, 0.30411907773179847`, 0.3332697150053751}],
+    Editable->False,
+    Selectable->False], ",", 
+   InterpretationBox[
+    ButtonBox[
+     TooltipBox[
+      GraphicsBox[{
+        {GrayLevel[0], RectangleBox[{0, 0}]}, 
+        {GrayLevel[0], RectangleBox[{1, -1}]}, 
+        {XYZColor[
+         0.22467813097484018`, 0.310272680697447, 0.3411043707152691], 
+         RectangleBox[{0, -1}, {2, 1}]}},
+       AspectRatio->1,
+       Frame->True,
+       FrameStyle->XYZColor[
+        0.09394924093133263, 0.12893840144735483`, 0.14081805749004941`],
+       FrameTicks->None,
+       ImageSize->
+        Dynamic[{
+         Automatic, 1.35 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+          Magnification]}],
+       PlotRangePadding->None],
+      "XYZColor[{0.22467813097484018, 0.310272680697447, \
+0.3411043707152691}]"],
+     Appearance->None,
+     BaseStyle->{},
+     BaselinePosition->Baseline,
+     ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+       If[
+        Not[
+         AbsoluteCurrentValue["Deployed"]], 
+        SelectionMove[Typeset`box$, All, Expression]; 
+        FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+        FrontEnd`Private`$ColorSelectorInitialColor = 
+         XYZColor[
+          0.22467813097484018`, 0.310272680697447, 0.3411043707152691]; 
+        FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+        MathLink`CallFrontEnd[
+          FrontEnd`AttachCell[Typeset`box$, 
+           FrontEndResource["XYZColorValueSelector"], {0, {Left, Bottom}}, {
+           Left, Top}, 
+           "ClosingActions" -> {
+            "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+     DefaultBaseStyle->{},
+     Evaluator->Automatic,
+     Method->"Preemptive"],
+    XYZColor[{0.22467813097484018`, 0.310272680697447, 0.3411043707152691}],
+    Editable->False,
+    Selectable->False], ",", 
+   InterpretationBox[
+    ButtonBox[
+     TooltipBox[
+      GraphicsBox[{
+        {GrayLevel[0], RectangleBox[{0, 0}]}, 
+        {GrayLevel[0], RectangleBox[{1, -1}]}, 
+        {XYZColor[0.21055157042644262`, 0.297472942710339, 0.324602048633836],
+          RectangleBox[{0, -1}, {2, 1}]}},
+       AspectRatio->1,
+       Frame->True,
+       FrameStyle->XYZColor[
+        0.08802945724553358, 0.12368829102778532`, 0.13424040393045672`],
+       FrameTicks->None,
+       ImageSize->
+        Dynamic[{
+         Automatic, 1.35 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+          Magnification]}],
+       PlotRangePadding->None],
+      "XYZColor[{0.21055157042644262, 0.297472942710339, 0.324602048633836}]"],
+     Appearance->None,
+     BaseStyle->{},
+     BaselinePosition->Baseline,
+     ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+       If[
+        Not[
+         AbsoluteCurrentValue["Deployed"]], 
+        SelectionMove[Typeset`box$, All, Expression]; 
+        FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+        FrontEnd`Private`$ColorSelectorInitialColor = 
+         XYZColor[0.21055157042644262`, 0.297472942710339, 0.324602048633836]; 
+        FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+        MathLink`CallFrontEnd[
+          FrontEnd`AttachCell[Typeset`box$, 
+           FrontEndResource["XYZColorValueSelector"], {0, {Left, Bottom}}, {
+           Left, Top}, 
+           "ClosingActions" -> {
+            "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+     DefaultBaseStyle->{},
+     Evaluator->Automatic,
+     Method->"Preemptive"],
+    XYZColor[{0.21055157042644262`, 0.297472942710339, 0.324602048633836}],
+    Editable->False,
+    Selectable->False], ",", 
+   InterpretationBox[
+    ButtonBox[
+     TooltipBox[
+      GraphicsBox[{
+        {GrayLevel[0], RectangleBox[{0, 0}]}, 
+        {GrayLevel[0], RectangleBox[{1, -1}]}, 
+        {XYZColor[
+         0.21113921391521742`, 0.2963323608142429, 0.3233694881816569], 
+         RectangleBox[{0, -1}, {2, 1}]}},
+       AspectRatio->1,
+       Frame->True,
+       FrameStyle->XYZColor[
+        0.0883552505128811, 0.12327999069283598`, 0.13375236967046694`],
+       FrameTicks->None,
+       ImageSize->
+        Dynamic[{
+         Automatic, 1.35 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+          Magnification]}],
+       PlotRangePadding->None],
+      "XYZColor[{0.21113921391521742, 0.2963323608142429, \
+0.3233694881816569}]"],
+     Appearance->None,
+     BaseStyle->{},
+     BaselinePosition->Baseline,
+     ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+       If[
+        Not[
+         AbsoluteCurrentValue["Deployed"]], 
+        SelectionMove[Typeset`box$, All, Expression]; 
+        FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+        FrontEnd`Private`$ColorSelectorInitialColor = 
+         XYZColor[
+          0.21113921391521742`, 0.2963323608142429, 0.3233694881816569]; 
+        FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+        MathLink`CallFrontEnd[
+          FrontEnd`AttachCell[Typeset`box$, 
+           FrontEndResource["XYZColorValueSelector"], {0, {Left, Bottom}}, {
+           Left, Top}, 
+           "ClosingActions" -> {
+            "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+     DefaultBaseStyle->{},
+     Evaluator->Automatic,
+     Method->"Preemptive"],
+    XYZColor[{0.21113921391521742`, 0.2963323608142429, 0.3233694881816569}],
+    Editable->False,
+    Selectable->False], ",", 
+   InterpretationBox[
+    ButtonBox[
+     TooltipBox[
+      GraphicsBox[{
+        {GrayLevel[0], RectangleBox[{0, 0}]}, 
+        {GrayLevel[0], RectangleBox[{1, -1}]}, 
+        {XYZColor[
+         0.21774835752343283`, 0.3023614843232243, 0.32959209982611753`], 
+         RectangleBox[{0, -1}, {2, 1}]}},
+       AspectRatio->1,
+       Frame->True,
+       FrameStyle->XYZColor[
+        0.09113495323626053, 0.12575800411571653`, 0.13623487831229525`],
+       FrameTicks->None,
+       ImageSize->
+        Dynamic[{
+         Automatic, 1.35 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+          Magnification]}],
+       PlotRangePadding->None],
+      "XYZColor[{0.21774835752343283, 0.3023614843232243, \
+0.32959209982611753}]"],
+     Appearance->None,
+     BaseStyle->{},
+     BaselinePosition->Baseline,
+     ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+       If[
+        Not[
+         AbsoluteCurrentValue["Deployed"]], 
+        SelectionMove[Typeset`box$, All, Expression]; 
+        FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+        FrontEnd`Private`$ColorSelectorInitialColor = 
+         XYZColor[
+          0.21774835752343283`, 0.3023614843232243, 0.32959209982611753`]; 
+        FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+        MathLink`CallFrontEnd[
+          FrontEnd`AttachCell[Typeset`box$, 
+           FrontEndResource["XYZColorValueSelector"], {0, {Left, Bottom}}, {
+           Left, Top}, 
+           "ClosingActions" -> {
+            "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+     DefaultBaseStyle->{},
+     Evaluator->Automatic,
+     Method->"Preemptive"],
+    XYZColor[{0.21774835752343283`, 0.3023614843232243, 0.32959209982611753`}],
+    Editable->False,
+    Selectable->False], ",", 
+   InterpretationBox[
+    ButtonBox[
+     TooltipBox[
+      GraphicsBox[{
+        {GrayLevel[0], RectangleBox[{0, 0}]}, 
+        {GrayLevel[0], RectangleBox[{1, -1}]}, 
+        {XYZColor[
+         0.20554202224483023`, 0.2898748229212522, 0.31644061282765834`], 
+         RectangleBox[{0, -1}, {2, 1}]}},
+       AspectRatio->1,
+       Frame->True,
+       FrameStyle->XYZColor[
+        0.08604508175127404, 0.12066422348917104`, 0.13098952570556205`],
+       FrameTicks->None,
+       ImageSize->
+        Dynamic[{
+         Automatic, 1.35 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+          Magnification]}],
+       PlotRangePadding->None],
+      "XYZColor[{0.20554202224483023, 0.2898748229212522, \
+0.31644061282765834}]"],
+     Appearance->None,
+     BaseStyle->{},
+     BaselinePosition->Baseline,
+     ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+       If[
+        Not[
+         AbsoluteCurrentValue["Deployed"]], 
+        SelectionMove[Typeset`box$, All, Expression]; 
+        FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+        FrontEnd`Private`$ColorSelectorInitialColor = 
+         XYZColor[
+          0.20554202224483023`, 0.2898748229212522, 0.31644061282765834`]; 
+        FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+        MathLink`CallFrontEnd[
+          FrontEnd`AttachCell[Typeset`box$, 
+           FrontEndResource["XYZColorValueSelector"], {0, {Left, Bottom}}, {
+           Left, Top}, 
+           "ClosingActions" -> {
+            "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+     DefaultBaseStyle->{},
+     Evaluator->Automatic,
+     Method->"Preemptive"],
+    XYZColor[{0.20554202224483023`, 0.2898748229212522, 0.31644061282765834`}],
+    Editable->False,
+    Selectable->False], ",", 
+   InterpretationBox[
+    ButtonBox[
+     TooltipBox[
+      GraphicsBox[{
+        {GrayLevel[0], RectangleBox[{0, 0}]}, 
+        {GrayLevel[0], RectangleBox[{1, -1}]}, 
+        {XYZColor[
+         0.20841348710304464`, 0.2970079242089155, 0.3221337242165446], 
+         RectangleBox[{0, -1}, {2, 1}]}},
+       AspectRatio->1,
+       Frame->True,
+       FrameStyle->XYZColor[
+        0.08706098518362335, 0.12344373527223157`, 0.13325376474360884`],
+       FrameTicks->None,
+       ImageSize->
+        Dynamic[{
+         Automatic, 1.35 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+          Magnification]}],
+       PlotRangePadding->None],
+      "XYZColor[{0.20841348710304464, 0.2970079242089155, \
+0.3221337242165446}]"],
+     Appearance->None,
+     BaseStyle->{},
+     BaselinePosition->Baseline,
+     ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+       If[
+        Not[
+         AbsoluteCurrentValue["Deployed"]], 
+        SelectionMove[Typeset`box$, All, Expression]; 
+        FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+        FrontEnd`Private`$ColorSelectorInitialColor = 
+         XYZColor[
+          0.20841348710304464`, 0.2970079242089155, 0.3221337242165446]; 
+        FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+        MathLink`CallFrontEnd[
+          FrontEnd`AttachCell[Typeset`box$, 
+           FrontEndResource["XYZColorValueSelector"], {0, {Left, Bottom}}, {
+           Left, Top}, 
+           "ClosingActions" -> {
+            "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+     DefaultBaseStyle->{},
+     Evaluator->Automatic,
+     Method->"Preemptive"],
+    XYZColor[{0.20841348710304464`, 0.2970079242089155, 0.3221337242165446}],
+    Editable->False,
+    Selectable->False]}], "}"}]], "Print",
+ CellChangeTimes->{3.707085642534339*^9}],
+
+Cell[BoxData["\<\"These are the color distances in the CIELAB \
+colorspace:\"\>"], "Print",
+ CellChangeTimes->{3.70708564254531*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "0.04837457480535405`", ",", "0.049938509614266505`", ",", 
+   "0.05008524064087263`", ",", "0.05065352193850605`", ",", 
+   "0.0509949747774429`", ",", "0.05194753889734553`", ",", 
+   "0.052403487947283334`", ",", "0.05284907097820305`", ",", 
+   "0.05316752272053985`", ",", "0.05353407375536747`"}], "}"}]], "Print",
+ CellChangeTimes->{3.7070856425546503`*^9}],
+
+Cell[BoxData["\<\"\\n\\nThe best match has a lattice constant of 8350 nm with \
+a hole radius of 3653.13 nm.\\nHere is the color of this match (right) \
+compared to your desired color (left):\"\>"], "Print",
+ CellChangeTimes->{3.707085642563588*^9}],
+
+Cell[BoxData[
+ GraphicsBox[{
+   {XYZColor[0.2, 0.3, 0.4], RectangleBox[{0, 0}]}, 
+   {XYZColor[0.22379864127802554`, 0.3106325678220307, 0.34437671115387486`], 
+    RectangleBox[{1.2, 0}]}},
+  ImageSize->Small]], "Print",
+ CellChangeTimes->{3.7070856425729713`*^9}],
+
+Cell[BoxData["\<\"This has a color distance of 0.0483746 . If you want to \
+keep iterating evaluate the Iteration2D function again.\"\>"], "Print",
+ CellChangeTimes->{3.7070856425821877`*^9}]
+}, Open  ]],
+
+Cell["\<\
+Evaluate the same function again if you want to keep searching.\
+\>", "Text",
+ CellChangeTimes->{{3.707084901381624*^9, 3.707084908901499*^9}, {
+  3.707084956041016*^9, 3.707084960559881*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Design of 3D Glasses", "Section",
+ CellChangeTimes->{{3.706985657472137*^9, 3.7069856666420813`*^9}}],
+
+Cell[TextData[{
+ "The 3D code runs exactly like the 1D code, so no sweat!\n\nThe code for \
+this calculation was originally written in Python by the Manoharan Group. \
+Their code can be found here: ",
+ StyleBox["https://github.com/manoharan-lab/structural-color\n",
+  FontSlant->"Italic"],
+ "The translated Mathematica code is found as part of the StructuralColor3D \
+package."
+}], "Text",
+ CellChangeTimes->{{3.707084525716269*^9, 3.707084592983696*^9}, {
+   3.707084640926272*^9, 3.7070846805758953`*^9}, 3.707085755596649*^9, {
+   3.707517608809101*^9, 3.707517643528451*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Get", "[", 
+  RowBox[{"\"\<StructuralColor3D`\>\"", ",", 
+   RowBox[{"Path", "\[Rule]", 
+    RowBox[{"NotebookDirectory", "[", "]"}]}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.7075166515475187`*^9, 3.70751667344489*^9}, {
+  3.707516729483411*^9, 3.707516730276865*^9}, {3.707516802823168*^9, 
+  3.707516803241637*^9}}],
+
+Cell[BoxData[
+ RowBox[{"?", "PhotonicSystemGlass"}]], "Input",
+ CellChangeTimes->{{3.7070846825373783`*^9, 3.707084686629771*^9}, {
+  3.70708579421205*^9, 3.707085795662232*^9}}],
+
+Cell[BoxData[
+ RowBox[{"?", "Iteration3D"}]], "Input",
+ CellChangeTimes->{{3.707084689910816*^9, 3.707084693295689*^9}}],
+
+Cell["\<\
+As of now, the matrix material must have a lower refractive index than the \
+particle material.\
+\>", "Text",
+ CellChangeTimes->{{3.707088033559951*^9, 3.707088054050984*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Iteration3D", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"0.2", ",", "0.4", ",", "0.3"}], "}"}], ",", " ", 
+   RowBox[{"PhotonicSystemGlass", "[", 
+    RowBox[{"1.49", ",", "1."}], "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.696032823859995*^9, 3.696032848439897*^9}, {
+   3.696032914926009*^9, 3.696032917163802*^9}, 3.702231415760047*^9, {
+   3.702231732866251*^9, 3.702231747184012*^9}, 3.702233839627001*^9, 
+   3.702235499789505*^9, 3.702237969747303*^9, 3.702240850451169*^9, 
+   3.702243051104581*^9, 3.7022471599193783`*^9, 3.702250724661911*^9, 
+   3.702253251280751*^9, 3.702256114973133*^9, 3.7022585549203033`*^9, 
+   3.7022593935241547`*^9, 3.702277727149737*^9, 3.702281680077931*^9, 
+   3.702284167643243*^9, 3.702286472954179*^9, {3.702348072609174*^9, 
+   3.702348158734105*^9}, {3.702348352814803*^9, 3.702348354085485*^9}, {
+   3.702348406968987*^9, 3.702348417606636*^9}, {3.7023871696690187`*^9, 
+   3.702387173264451*^9}, {3.707086426641987*^9, 3.70708642817026*^9}, {
+   3.707087835778447*^9, 3.7070878574707127`*^9}}],
+
+Cell["\<\
+Each iteration should take a couple of minutes.
+
+As before, use IterationReset3D if you want to switch to a new color\
+\>", "Text",
+ CellChangeTimes->{{3.707087989793618*^9, 3.7070880114836082`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"?", "IterationReset3D"}]], "Input",
+ CellChangeTimes->{{3.707088013215983*^9, 3.7070880147156076`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Design of a New Geometry (make your own!)", "Section",
+ CellChangeTimes->{{3.70698567147081*^9, 3.706985699358819*^9}}],
+
+Cell["\<\
+If you\[CloseCurlyQuote]d like to design for a completely new geometry, all \
+you need is code that will output a reflectance spectrum given a set of \
+parameters. It\[CloseCurlyQuote]s easiest if this code is written in \
+Mathematica, and it\[CloseCurlyQuote]s often worth your time to translate \
+into Mathematica from another language if the code is short enough. If you \
+don\[CloseCurlyQuote]t want to translate, look at the 2D sub-package for an \
+example of interfacing with an external compiler.
+
+The StructuralColorTemplate sub-package is meant to guide you through the \
+process of making your own sub-package. Open it! (It may be useful to open \
+StructuralColor1D as well as a reference.)\
+\>", "Text",
+ CellChangeTimes->{{3.707084733223514*^9, 3.707084833458583*^9}, {
+   3.707085092186089*^9, 3.707085126793887*^9}, {3.707085205948917*^9, 
+   3.707085358024053*^9}, {3.70708611571202*^9, 3.707086116208846*^9}, {
+   3.707088077230896*^9, 3.707088078334365*^9}, 3.7070924783848267`*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Using an Image as a Template", "Section",
+ CellChangeTimes->{{3.706985706405615*^9, 3.7069857315869007`*^9}}],
+
+Cell["\<\
+The notebook \[OpenCurlyDoubleQuote]Design_From_An_Image\
+\[CloseCurlyDoubleQuote] will walk you through the process.\
+\>", "Text",
+ CellChangeTimes->{{3.707089561030992*^9, 3.707089589304832*^9}, {
+  3.707516814819682*^9, 3.7075168226013517`*^9}}]
+}, Closed]]
+}, Open  ]]
+},
+WindowSize->{1206, 631},
+WindowMargins->{{6, Automatic}, {Automatic, 23}},
+FrontEndVersion->"11.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (July 28, \
+2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 120, 1, 92, "Title"],
+Cell[703, 25, 252, 6, 35, "Text"],
+Cell[CellGroupData[{
+Cell[980, 35, 151, 2, 64, "Section"],
+Cell[1134, 39, 206, 4, 30, "Text"],
+Cell[1343, 45, 252, 5, 32, "Input"],
+Cell[1598, 52, 223, 5, 30, "Text"],
+Cell[1824, 59, 125, 2, 32, "Input"],
+Cell[1952, 63, 124, 2, 32, "Input"],
+Cell[2079, 67, 500, 10, 87, "Text"],
+Cell[CellGroupData[{
+Cell[2604, 81, 276, 5, 35, "Subsubsection"],
+Cell[2883, 88, 354, 7, 30, "Text"],
+Cell[3240, 97, 221, 4, 32, "Input"],
+Cell[3464, 103, 172, 4, 30, "Text"],
+Cell[3639, 109, 1614, 44, 32, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5290, 158, 111, 1, 35, "Subsubsection"],
+Cell[5404, 161, 1821, 47, 32, "Input"],
+Cell[7228, 210, 200, 4, 30, "Text"],
+Cell[7431, 216, 251, 6, 32, "Input"],
+Cell[7685, 224, 175, 3, 32, "Input"],
+Cell[7863, 229, 278, 5, 49, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[8190, 240, 134, 2, 50, "Section"],
+Cell[8327, 244, 294, 6, 32, "Input"],
+Cell[8624, 252, 395, 9, 68, "Text"],
+Cell[9022, 263, 119, 2, 32, "Input"],
+Cell[9144, 267, 238, 5, 32, "Input"],
+Cell[9385, 274, 329, 8, 32, "Input"],
+Cell[9717, 284, 271, 5, 30, "Text"],
+Cell[CellGroupData[{
+Cell[10013, 293, 118, 1, 35, "Subsubsection"],
+Cell[10134, 296, 355, 6, 30, "Text"],
+Cell[10492, 304, 126, 2, 32, "Input"],
+Cell[10621, 308, 536, 11, 87, "Text"],
+Cell[11160, 321, 273, 6, 32, "Input"],
+Cell[11436, 329, 226, 4, 30, "Text"],
+Cell[11665, 335, 122, 2, 32, "Input"],
+Cell[11790, 339, 161, 3, 30, "Text"],
+Cell[11954, 344, 124, 2, 32, "Input"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[12127, 352, 127, 1, 50, "Section"],
+Cell[12257, 355, 2278, 35, 353, "Text"],
+Cell[14538, 392, 293, 6, 32, "Input"],
+Cell[14834, 400, 127, 2, 32, "Input"],
+Cell[14964, 404, 119, 2, 32, "Input"],
+Cell[CellGroupData[{
+Cell[15108, 410, 167, 2, 35, "Subsubsection"],
+Cell[15278, 414, 290, 7, 68, "Text"],
+Cell[15571, 423, 335, 8, 32, "Input"],
+Cell[15909, 433, 1490, 26, 201, "Text"],
+Cell[17402, 461, 462, 9, 49, "Text"],
+Cell[CellGroupData[{
+Cell[17889, 474, 111, 1, 24, "Print"],
+Cell[18003, 477, 863, 23, 44, "Print"],
+Cell[18869, 502, 113, 1, 24, "Print"],
+Cell[18985, 505, 17642, 461, 24, "Print"],
+Cell[36630, 968, 132, 2, 24, "Print"],
+Cell[36765, 972, 406, 8, 24, "Print"],
+Cell[37174, 982, 249, 3, 82, "Print"],
+Cell[37426, 987, 265, 6, 94, "Print"],
+Cell[37694, 995, 191, 2, 24, "Print"]
+}, Open  ]],
+Cell[37900, 1000, 202, 4, 30, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[38151, 1010, 107, 1, 50, "Section"],
+Cell[38261, 1013, 579, 11, 87, "Text"],
+Cell[38843, 1026, 343, 7, 32, "Input"],
+Cell[39189, 1035, 178, 3, 32, "Input"],
+Cell[39370, 1040, 120, 2, 32, "Input"],
+Cell[39493, 1044, 185, 4, 30, "Text"],
+Cell[39681, 1050, 1072, 18, 32, "Input"],
+Cell[40756, 1070, 209, 5, 68, "Text"],
+Cell[40968, 1077, 127, 2, 32, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[41132, 1084, 125, 1, 50, "Section"],
+Cell[41260, 1087, 1009, 16, 125, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[42306, 1108, 115, 1, 50, "Section"],
+Cell[42424, 1111, 258, 5, 30, "Text"]
+}, Closed]]
+}, Open  ]]
+}
+]
+*)
+
